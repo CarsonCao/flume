@@ -252,8 +252,9 @@ public class Application {
   public static void main(String[] args) {
 
     try {
+      /*初始化ssl的全局参数，利用System.getEnv()和System.setProperty(), flume可利用ssl进行加解密传输*/
       SSLUtil.initGlobalSSLParameters();
-
+      /*参数解析*/
       Options options = new Options();
 
       Option option = new Option("n", "name", true, "the name of this agent");
@@ -286,11 +287,12 @@ public class Application {
       CommandLineParser parser = new GnuParser();
       CommandLine commandLine = parser.parse(options, args);
 
+      /*如果含有-h参数，打印参数说明，退出主程序*/
       if (commandLine.hasOption('h')) {
         new HelpFormatter().printHelp("flume-ng agent", options, true);
         return;
       }
-
+      /*如果含有no-reload-conf这个参数，reload=false, 默认应该为true,reload用来控制是否自动加载配置参数*/
       String agentName = commandLine.getOptionValue('n');
       boolean reload = !commandLine.hasOption("no-reload-conf");
 
@@ -298,7 +300,7 @@ public class Application {
       if (commandLine.hasOption('z') || commandLine.hasOption("zkConnString")) {
         isZkConfigured = true;
       }
-
+      /*从zookeeper获取参数*/
       Application application;
       if (isZkConfigured) {
         // get options
@@ -306,7 +308,9 @@ public class Application {
         String baseZkPath = commandLine.getOptionValue('p');
 
         if (reload) {
+          /*EventBus一个Android事件发布订阅轻量级框架,自动加载是借助该框架实施的*/
           EventBus eventBus = new EventBus(agentName + "-event-bus");
+          /*LifecycleAware为flume自定义生命周期接口，所有组件都实现了该接口*/
           List<LifecycleAware> components = Lists.newArrayList();
           PollingZooKeeperConfigurationProvider zookeeperConfigurationProvider =
               new PollingZooKeeperConfigurationProvider(
