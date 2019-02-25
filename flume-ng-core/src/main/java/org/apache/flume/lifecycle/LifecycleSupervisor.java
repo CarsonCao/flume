@@ -51,6 +51,9 @@ public class LifecycleSupervisor implements LifecycleAware {
     lifecycleState = LifecycleState.IDLE;
     supervisedProcesses = new HashMap<LifecycleAware, Supervisoree>();
     monitorFutures = new HashMap<LifecycleAware, ScheduledFuture<?>>();
+
+    /*采用guava 的ThreadFactoryBuilder构建线程池，ThreadFactoryBuilder可以传入
+    一个namFormat参数用户来表示线程的name，它内部会使用数字增量表示%d*/
     monitorService = new ScheduledThreadPoolExecutor(10,
         new ThreadFactoryBuilder().setNameFormat(
             "lifecycleSupervisor-" + Thread.currentThread().getId() + "-%d")

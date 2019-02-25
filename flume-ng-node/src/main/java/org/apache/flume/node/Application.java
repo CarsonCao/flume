@@ -82,6 +82,7 @@ public class Application {
     lifecycleLock.lock();
     try {
       for (LifecycleAware component : components) {
+        /*Supervisor是一个调度类，利用ScheduledThreadPoolExecutor定时调度component*/
         supervisor.supervise(component,
             new SupervisorPolicy.AlwaysRestartPolicy(), LifecycleState.START);
       }
@@ -316,6 +317,11 @@ public class Application {
               new PollingZooKeeperConfigurationProvider(
                   agentName, zkConnectionStr, baseZkPath, eventBus);
           components.add(zookeeperConfigurationProvider);
+          /**
+           * component是什么?
+           *
+           *
+           */
           application = new Application(components);
           eventBus.register(application);
         } else {
