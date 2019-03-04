@@ -317,11 +317,6 @@ public class Application {
               new PollingZooKeeperConfigurationProvider(
                   agentName, zkConnectionStr, baseZkPath, eventBus);
           components.add(zookeeperConfigurationProvider);
-          /**
-           * component是什么?
-           *
-           *
-           */
           application = new Application(components);
           eventBus.register(application);
         } else {
@@ -354,7 +349,7 @@ public class Application {
           }
         }
         List<LifecycleAware> components = Lists.newArrayList();
-
+        //动态拉取最新的配置信息
         if (reload) {
           EventBus eventBus = new EventBus(agentName + "-event-bus");
           PollingPropertiesFileConfigurationProvider configurationProvider =
@@ -367,9 +362,13 @@ public class Application {
           PropertiesFileConfigurationProvider configurationProvider =
               new PropertiesFileConfigurationProvider(agentName, configurationFile);
           application = new Application();
+          /*getConfiguration从configurationFile中获取配置信息，通过反射调用生成各个组件类，放到SimpleMaterializedConfiguration
+          * 对象中，返回
+          * handleConfigurationEvent将这些组建利用LifecycleSupervisor.supervise调起*/
           application.handleConfigurationEvent(configurationProvider.getConfiguration());
         }
       }
+      /*利用LifecycleSupervisor.supervise将全局的components中组件调起*/
       application.start();
 
       final Application appReference = application;

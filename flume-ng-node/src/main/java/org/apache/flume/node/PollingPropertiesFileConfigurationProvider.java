@@ -68,6 +68,7 @@ public class PollingPropertiesFileConfigurationProvider
             new ThreadFactoryBuilder().setNameFormat("conf-file-poller-%d")
                 .build());
 
+    /*新启动一个线程，将getConfiguration加到eventBus中，自动更新配置文件,eventBus是类初始化的时候传入的*/
     FileWatcherRunnable fileWatcherRunnable =
         new FileWatcherRunnable(file, counterGroup);
 
