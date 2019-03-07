@@ -568,13 +568,13 @@ limitations under the License.
             </dependency>
           </dependencies>
           <executions>
-            <execution>
-              <id>verify.checkstyle</id>
-              <phase>verify</phase>
-              <goals>
-                <goal>check</goal>
-              </goals>
-            </execution>
+            <!--<execution>-->
+              <!--<id>verify.checkstyle</id>-->
+              <!--<phase>verify</phase>-->
+              <!--<goals>-->
+                <!--<goal>check</goal>-->
+              <!--</goals>-->
+            <!--</execution>-->
           </executions>
           <configuration>
             <configLocation>config/checkstyle/checkstyle.xml</configLocation>

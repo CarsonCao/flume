@@ -91,6 +91,7 @@ public class Application {
     }
   }
 
+  /*guava EventBus中用@Subscribe标记,定义监听处理方法*/
   @Subscribe
   public void handleConfigurationEvent(MaterializedConfiguration conf) {
     try {
@@ -349,7 +350,7 @@ public class Application {
           }
         }
         List<LifecycleAware> components = Lists.newArrayList();
-        //动态拉取最新的配置信息
+        //从文件中动态拉取最新的配置信息
         if (reload) {
           EventBus eventBus = new EventBus(agentName + "-event-bus");
           PollingPropertiesFileConfigurationProvider configurationProvider =
@@ -364,7 +365,7 @@ public class Application {
           application = new Application();
           /*getConfiguration从configurationFile中获取配置信息，通过反射调用生成各个组件类，放到SimpleMaterializedConfiguration
           * 对象中，返回
-          * handleConfigurationEvent将这些组建利用LifecycleSupervisor.supervise调起*/
+          * handleConfigurationEvent将这些组件利用LifecycleSupervisor.supervise调起*/
           application.handleConfigurationEvent(configurationProvider.getConfiguration());
         }
       }
